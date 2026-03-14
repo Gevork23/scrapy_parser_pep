@@ -37,39 +37,43 @@ scrapy_parser_pep/
 ├── requirements.txt
 └── scrapy.cfg
 ```
-Как развернуть проект
+### Как развернуть проект
 
-Клонировать репозиторий и перейти в папку проекта:
-
-git clone <URL_репозитория>
+#### Клонировать репозиторий и перейти в папку проекта:
+```
+git clone https://github.com/Gevork23/scrapy_parser_pep.git
 cd scrapy_parser_pep
+```
 
-Создать и активировать виртуальное окружение:
+#### Создать и активировать виртуальное окружение:
 
 Windows (Git Bash)
+```
 py -3.9 -m venv venv
 source venv/Scripts/activate
-Windows (PowerShell)
-py -3.9 -m venv venv
-venv\Scripts\Activate.ps1
+```
+
 Linux / macOS
+```
 python3.9 -m venv venv
 source venv/bin/activate
+```
 
-Установить зависимости:
-
+#### Установить зависимости:
+```
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-Запуск парсера
+```
 
-Запустить паука:
+### Запуск парсера
 
+#### Запустить паука:
+```
 python -m scrapy crawl pep
+```
 
 После выполнения в папке results/ будут созданы два файла:
-
 pep_YYYY-MM-DDTHH-MM-SS.csv
-
 status_summary_YYYY-MM-DD_HH-MM-SS.csv
 
 Пример содержимого файлов
@@ -84,54 +88,49 @@ Active,36
 Final,352
 Draft,49
 Total,718
-Запуск тестов
+#### Запуск тестов
 
 Проверка pytest:
-
+```
 python -m pytest
-
+```
 Проверка flake8:
-
+```
 flake8
-Проверка форматирования
+```
+#### Проверка форматирования
 
 Установить black и isort, если они ещё не установлены:
-
+```
 python -m pip install black isort
-
+```
 Проверить isort:
-
+```
 isort . --check-only
-
+```
 Проверить black:
-
+```
 black . --check
-
+```
 Исправить сортировку импортов и форматирование:
-
+```
 isort .
 black .
+```
 
-Повторная проверка:
+### Что делает проект
 
-isort . --check-only
-black . --check
-Что делает проект
+##### Переходит на страницу PEP Index.
 
-Переходит на страницу PEP Index.
+##### Находит ссылку на Numerical Index.
 
-Находит ссылку на Numerical Index.
+##### Собирает ссылки на все PEP.
 
-Собирает ссылки на все PEP.
+##### Заходит на страницу каждого PEP.
 
-Заходит на страницу каждого PEP.
-
-Извлекает:
-
+##### Извлекает:
 номер
-
 название
-
 статус
 
 Сохраняет полный список PEP в CSV.
