@@ -1,3 +1,5 @@
+import re
+
 import scrapy
 
 from pep_parse.items import PepParseItem
@@ -9,20 +11,23 @@ class PepSpider(scrapy.Spider):
     start_urls = ['https://peps.python.org/']
 
     def parse(self, response):
-        pep_links = response.css(
-            'section#numerical-index a.pep::attr(href)'
-        ).getall()
+        yield response.follow('numerical/', callback=self.parse_numerical)
 
+    def parse_numerical(self, response):
+        pep_links = response.css(
+            'section#numerical-index a::attr(href)'
+        ).getall()
         for link in pep_links:
-            yield response.follow(link, callback=self.parse_pep)
+            if link != '../pep-0000/':
+                yield response.follow(link, callback=self.parse_pep)
 
     def parse_pep(self, response):
-        number = response.css(
-            'dl.rfc2822.field-list.simple dd.field-even::text'
-        ).get()
-        name = response.css('h1.page-title::text').get()
-        status = response.css(
-            'abbr::text'
+        title = response.css('h1.page-title::text').get()
+        match = re.search(r'PEP\s+(\d+)\s+–\s+(.+)', title)
+        number, name = match.groups()
+
+        status = response.xpath(
+            '//dt[contains(., "Status")]/following-sibling::dd[1]/abbr/text()'
         ).get()
 
         yield PepParseItem(
