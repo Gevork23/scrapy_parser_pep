@@ -18,8 +18,12 @@ class PepSpider(scrapy.Spider):
             "section#numerical-index a::attr(href)"
         ).getall()
         for link in pep_links:
-            if link != "../pep-0000/":
-                yield response.follow(link, callback=self.parse_pep)
+            absolute_link = response.urljoin(link)
+            if absolute_link != "https://peps.python.org/pep-0000/":
+                yield response.follow(
+                    absolute_link,
+                    callback=self.parse_pep,
+                )
 
     def parse_pep(self, response):
         title = response.css("h1.page-title::text").get()
